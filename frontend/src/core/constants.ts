@@ -8,3 +8,12 @@ export const BACKEND_ENDPOINTS = {
         me: `${baseURL}/auth/me`
     }
 }
+
+
+export const APP_ROUTES = {
+    auth: {
+        login: `/auth/login`,
+        register: '/auth/register',
+        logout: '/auth/logout'
+    }
+}

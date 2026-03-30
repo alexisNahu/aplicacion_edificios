@@ -3,7 +3,7 @@ import type { AxiosError, AxiosInstance } from "axios";
 export const setupErrorInterceptor = (axiosInstance: AxiosInstance) => {
     axiosInstance.interceptors.response.use(
         (response) => response,
-        (error: AxiosError) => {
+        (error: any) => {
             if (error.response) {
                 const { status, data } = error.response;
                 const errorMessage = (data as any)?.detail || (data as any)?.error || "Error inesperado";

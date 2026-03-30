@@ -2,6 +2,8 @@ import {z} from 'zod'
 
 export const RegisterSchema = z.object({
     username: z.string().min(8,"8 characteres minimo"),
+    first_name: z.string().min(1, "Campo obligatorio"),
+    last_name: z.string().min(1, "Campo obligatorio"),
     email: z.email("Formato incorrecto").min(1, "El email es requerido"),
     password: z.string().min(8, "Minimo 8 caracteres"),
     repeat_password: z.string(),
@@ -11,8 +13,8 @@ export const RegisterSchema = z.object({
 })
 
 export const LoginSchema = z.object({
-    username: z.string(),
-    password: z.string()
+    username: z.string().min(1, 'Campo obligatorio'),
+    password: z.string().min(1, 'Campo obligatorio')
 })
 
 export type RegisterSchemaDTO = z.infer<typeof RegisterSchema>
@@ -25,12 +27,6 @@ export interface TokenPayload {
     id: string,
     username: string,
     exp: Date
-}
-
-export interface LoginResponse {
-    access_token: string,
-    refresh_token: string,
-    token_type: string
 }
 
 export interface User {

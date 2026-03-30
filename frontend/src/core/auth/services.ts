@@ -5,9 +5,10 @@ import {
     type TokenPayload,
     type User
 } from "./schemas";
-import {httpClient, queryClient} from "../httpClient";
-import {authKeys} from "./auth.keys.ts";
-import {BACKEND_ENDPOINTS} from "../constants.ts";
+
+import {BACKEND_ENDPOINTS} from "@/core/constants";
+import {authKeys} from "@/core/auth/auth.keys";
+import {httpClient, queryClient} from "@/core/httpClient";
 
 export const authServices = {
     register: async (request: RegisterSchemaDTO): Promise<User> => {
@@ -15,12 +16,12 @@ export const authServices = {
         const response = await httpClient.post<ApiResponse<User>>(BACKEND_ENDPOINTS.auth.register, fields)
         return response.data.data
     },
-    login: async (request: LoginSchemaDTO): Promise<TokenPayload> => {
-        await httpClient.post(BACKEND_ENDPOINTS.auth.login, request);
+    login: async (request: LoginSchemaDTO): Promise<ApiResponse<null>> => {
+        const response = await httpClient.post(BACKEND_ENDPOINTS.auth.login, request);
         const userData: TokenPayload = await authServices.me();
 
         queryClient.setQueryData(authKeys.me, userData);
-        return userData;
+        return response.data;
     },
     me: async (): Promise<TokenPayload> => {
         const response = await httpClient.get<ApiResponse<TokenPayload>>(BACKEND_ENDPOINTS.auth.me)

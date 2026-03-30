@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {type ReactNode, useEffect, useState} from "react";
-import {queryClient} from "../core/httpClient";
+import {queryClient} from "../httpClient";
 
-export const QueryProvider = ({ children }: { children: ReactNode }) => {
+export default function QueryProvider ({ children }: { children: ReactNode }) {
 
     return (
         <QueryClientProvider client={queryClient}>

@@ -1,0 +1,10 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { QueryProvider, Login } from "../../components";
+---
+
+<Layout>
+    <QueryProvider client:only="react">
+        <Login client:load />
+    </QueryProvider>
+</Layout>

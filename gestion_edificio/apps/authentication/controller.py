@@ -18,6 +18,7 @@ security = HTTPBearer()  # ← instancia arriba del router
 router = APIRouter(tags=["authentication"])
 @router.post(AppRoutes.LOGIN, status_code=status.HTTP_200_OK)
 async def login(request: LoginRequest = Body(...), auth_service: AuthService = Depends(AuthService)):
+
     response_data: LoginResponse = await auth_service.login(
         username=request.username,
         password=request.password.get_secret_value()
