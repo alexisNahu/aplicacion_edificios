@@ -1,0 +1,10 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { QueryProvider, Register } from "@/components";
+---
+
+<Layout>
+    <QueryProvider client:only="react">
+        <Register client:load />
+    </QueryProvider>
+</Layout>
