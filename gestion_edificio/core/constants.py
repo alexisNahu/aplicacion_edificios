@@ -1,0 +1,13 @@
+class AppRoutes:
+    DEUDAS = '/api/deudas'
+    DEPARTAMENTOS = '/api/departamentos'
+    EDIFICIOS = '/api/edificios'
+    INQUILINOS = '/api/inquilinos'
+    PAGOS = '/api/pagos'
+    ABONOS = '/api/abonos'
+    RECLAMOS = '/api/reclamos'
+    CONTRATOS = '/api/contratos'
+    LOGIN = '/api/auth/login'
+    REGISTER = '/api/auth/register'
+    ME = '/api/auth/me'
+    LOGOUT = '/api/auth/logout'
