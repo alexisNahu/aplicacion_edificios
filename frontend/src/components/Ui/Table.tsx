@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import {type ReactNode, useEffect} from "react";
 import type { Pagination } from "@/core";
 
 interface Column<T> {
@@ -26,6 +26,7 @@ export function Table<T>({
                              pagination,
                              onPageChange
                          }: TableProps<T>) {
+
 
     if (loading) {
         return (
@@ -72,7 +73,7 @@ export function Table<T>({
             </div>
 
             {/* Renderizado de Paginación Interna usando tu Interface Pagination */}
-            {pagination && pagination.paginas_totales > 1 && onPageChange && (
+            {pagination && onPageChange && (
                 <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-gray-100">
                     <div className="text-sm text-gray-500">
                         Página <span className="font-semibold text-gray-900">{pagination.pagina_actual}</span> de <span className="font-semibold text-gray-900">{pagination.paginas_totales}</span>

@@ -11,15 +11,6 @@ export function ContratosFilters() {
         setDataFilters((prev) => ({ ...prev, ...update }));
     };
 
-    // 3. Esta función se ejecuta SÓLO al presionar BUSCAR
-    const onSubmit = () => {
-        const cleaned = Object.fromEntries(
-            Object.entries(dataFilters).filter(([_, v]) => v !== undefined && v !== "")
-        );
-        console.log("Aplicando filtros oficiales:", cleaned);
-        setDataFilters(cleaned); // Notifica al Padre para el Fetch
-    };
-
     const handleClear = () => {
         setDataFilters({});
     };

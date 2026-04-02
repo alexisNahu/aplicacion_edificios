@@ -1,6 +1,7 @@
 import type { Contratos } from "../models";
 import {Table} from "@/components/Ui/Table";
 import type {Pagination} from "@/core";
+import {useContratoContext} from "@/features/contratos/contratos.context";
 
 interface ContratosTableProps {
     contratos: Contratos[];
@@ -9,6 +10,8 @@ interface ContratosTableProps {
 }
 
 export function ContratosTable({ contratos, loading, pagination }: ContratosTableProps) {
+    const {setDataFilters, dataFilters} = useContratoContext()
+
     const columns = [
         {
             header: "Inquilino",
@@ -59,6 +62,7 @@ export function ContratosTable({ contratos, loading, pagination }: ContratosTabl
             data={contratos}
             columns={columns}
             loading={loading}
+            onPageChange={(page) => setDataFilters({...dataFilters, page})}
             pagination={pagination}
             rowKey="id"
         />

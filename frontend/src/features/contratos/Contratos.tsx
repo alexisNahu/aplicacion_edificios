@@ -3,14 +3,16 @@ import {useContratos} from "@/core/services/contratos/useContratos";
 import {ContratosFilters} from "@/features/contratos/components/Filter";
 import {ContratosTable} from "@/features/contratos/components/Table";
 import {useContratoContext} from "@/features/contratos/contratos.context";
+import {useEffect} from "react";
 
 function Contratos() {
 
     const {dataFilters, setDataFilters} = useContratoContext();
 
-    // 2. Consumimos el Hook.
-    // Cada vez que 'filters' cambie, useContratos disparará una nueva petición al back automáticamente.
+
+
     const { data, isLoading, isError } = useContratos(dataFilters);
+
 
     return (
         <div className="p-6 flex flex-col gap-8">
