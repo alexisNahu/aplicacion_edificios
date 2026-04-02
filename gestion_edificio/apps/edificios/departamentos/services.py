@@ -7,7 +7,7 @@ from apps.edificios.departamentos.schema import (
     DepartamentoActualizar
 )
 from apps.edificios.edificios.services import EdificiosService
-from core.exceptions import handle_error
+
 
 
 class DepartamentosService(Service[DepartamentoRespuesta, DepartamentoCrear, DepartamentoActualizar]):

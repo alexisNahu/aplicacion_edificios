@@ -23,4 +23,16 @@ app.add_middleware(
 )
 
 register_exception_handlers(app)
+
+from fastapi.exceptions import ResponseValidationError
+from fastapi.responses import JSONResponse
+
+# Agregá este decorador en tu main.py o router para ver el detalle real
+@app.exception_handler(ResponseValidationError)
+async def validation_exception_handler(request, exc):
+    print(f"Errores de validación: {exc.errors()}") # Esto imprimirá el campo exacto en la consola
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors()},
+    )
 app.include_router(app_router)

@@ -43,7 +43,6 @@ class ContratosService(Service[ContratoRespuesta, ContratoCrear, ContratoActuali
 
     async def update(self, id: int, payload: ContratoActualizar):
             cleaned_payload = payload.model_dump(exclude_none=True)
-
             if "departamento_id" in cleaned_payload:
                 nuevo_depto = await self.departamentos_service.get(id=cleaned_payload["departamento_id"])
 

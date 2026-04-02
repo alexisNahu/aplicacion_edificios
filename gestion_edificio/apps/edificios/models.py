@@ -23,7 +23,8 @@ class Departamentos(models.Model):
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        db_column='edificio_id'
+        db_column='edificio_id',
+        related_name = 'edificios'
     )
     status = models.BooleanField(default=True)
     ocupado = models.BooleanField(default=False)

@@ -12,14 +12,16 @@ class Contratos(models.Model):
         on_delete=models.CASCADE,
         null=False, 
         blank=False,
-        db_column='inquilino_id'
+        db_column='inquilino_id',
+        related_name='contratos'
     )
     departamento = models.ForeignKey(
         'edificios.Departamentos',
         on_delete=models.CASCADE,
         null=False, 
         blank=False,
-        db_column='departamento_id'
+        db_column='departamento_id',
+        related_name='contratos'
     )
     frecuencia_pago = models.CharField(
         choices=([

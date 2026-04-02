@@ -42,9 +42,17 @@ export interface User {
     last_login: string | null;
 }
 
+export interface Pagination {
+    paginas_totales: number,
+    pagina_actual: number,
+    pagina_siguiente?: number,
+    pagina_previa?: number
+}
+
 export interface ApiResponse<T> {
     msg: string,
     data: T,
-    status_code: number
+    status_code: number,
+    pagination?: Pagination
 }
 

@@ -1,6 +1,17 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
+from core.utils import AsList
+
+class EdificiosMinimo(BaseModel):
+    id: int
+    nombre: str
+    descripcion: Optional[str]
+
+    model_config = {
+        "from_attributes": True
+    }
+
 
 class DepartamentoCrear(BaseModel):
     numero_departamento: str = Field(min_length=1, max_length=20)
@@ -25,19 +36,21 @@ class DepartamentoRespuesta(BaseModel):
     numero_departamento: str
     piso: int
     descripcion: Optional[str] = None
-    edificio_id: int
+    edificio: AsList[EdificiosMinimo]
     status: bool
     ocupado: bool
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
 class DepartamentoFiltros(BaseModel):
+    id: Optional[int] = Field(default=None, ge=1)
     numero_departamento: Optional[str] = Field(default=None, max_length=20)
     piso: Optional[int] = Field(default=None, ge=0, le=3)
     status: Optional[bool] = None
     ocupado: Optional[bool] = None
-    edificio_id: Optional[int] = Field(default=None, ge=1)
+    edificio__nombre__icontains: Optional[str] = Field(None, alias='nombre_edificio')
     page: Optional[int] = Field(default=1)
     page_size: Optional[int] = Field(default=10)

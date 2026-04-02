@@ -2,12 +2,12 @@ import axios from 'axios'
 import {QueryClient} from "@tanstack/react-query";
 import {setupErrorInterceptor} from "./interceptors/errors.interceptor";
 
-export const httpClient = axios.create({
+export const api = axios.create({
     baseURL: import.meta.env.PUBLIC_BACKEND_API,
     withCredentials: true
 })
 
-setupErrorInterceptor(httpClient)
+setupErrorInterceptor(api)
 
 export const queryClient = new QueryClient({
     defaultOptions: {

@@ -3,7 +3,7 @@ GET http://localhost:8000/api/inquilinos
 Content-Type: application/json
 
 ### Obtener inquilino por id
-GET http://localhost:8000/api/inquilinos?id=2
+GET http://localhost:8000/api/inquilinos?nombre_completo=Al
 Content-Type: application/json
 
 ### Obtener inquilinos por nombre
@@ -27,12 +27,12 @@ POST http://localhost:8000/api/inquilinos
 Content-Type: application/json
 
 {
-  "nombre_completo": "Juan Perez Lopez saeloo",
+  "nombre_completo": "lunita",
   "status": true,
   "telefono": "09912345678",
   "email": "juan@gmail.com",
-  "numero_identificacion": "12345678901",
-  "tipo_identificacion": "Cedula"
+  "numero_identificacion": "123456-2",
+  "tipo_identificacion": "Ruc"
 }
 
 ### Crear inquilino - numero de identificacion existente

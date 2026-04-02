@@ -3,7 +3,7 @@ GET http://localhost:8000/api/departamentos
 Content-Type: application/json
 
 ### Obtener departamentos por edificio
-GET http://localhost:8000/api/departamentos?edificio_id=6
+GET http://localhost:8000/api/departamentos?nombre_edificio=Torre
 Content-Type: application/json
 
 ### Obtener departamentos por piso

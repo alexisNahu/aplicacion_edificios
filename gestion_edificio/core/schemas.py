@@ -16,3 +16,4 @@ class ApiResponse(BaseModel, Generic[T]):
     success: bool = True
     data: Optional[T] = None
     pagination: Optional[Pagination] = None
+

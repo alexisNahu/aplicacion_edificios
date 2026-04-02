@@ -3,15 +3,33 @@ from typing import Optional, Literal
 from datetime import date
 from decimal import Decimal
 from core.exceptions import BadRequestError
+from core.utils import AsList
 
 FrecuenciaPago = Literal['semanal', 'quincenal', 'mensual', 'bimestral', 'trimestral', 'semestral', 'anual']
+
+class InquilinoMinimo(BaseModel):
+    id: int
+    nombre_completo: str
+    numero_identificacion: str
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class DepartamentoMinimo(BaseModel):
+    id: int
+    numero_departamento: str
+
+    model_config = {
+        "from_attributes": True
+    }
 
 class ContratoBase(BaseModel):
     frecuencia_pago: FrecuenciaPago
     monto: Decimal = Field(ge=0, max_digits=10, decimal_places=2)
     dia_pago: int = Field(ge=1, le=31)
     fecha_inicio: date
-    fecha_fin: date
+    fecha_fin:  date
     descripcion: Optional[str] = Field(default=None, max_length=500)
 
     @model_validator(mode='after')
@@ -46,8 +64,6 @@ class ContratoActualizar(BaseModel):
 
 class ContratoRespuesta(BaseModel):
     id: int
-    inquilino_id: int
-    departamento_id: int
     frecuencia_pago: str
     monto: Decimal
     status: bool
@@ -56,16 +72,28 @@ class ContratoRespuesta(BaseModel):
     fecha_fin: date
     al_dia: bool
     descripcion: Optional[str]
+    inquilino: AsList[InquilinoMinimo] = []
+    departamento: AsList[DepartamentoMinimo] = []
 
-    class Config:
-        from_attributes = True
+
+    model_config = {
+        "from_attributes": True
+    }
+
+
 
 class ContratoFiltros(BaseModel):
     id: Optional[int] = None
-    inquilino_id: Optional[int] = None
+    inquilino__numero_identificacion__icontains: Optional[str] = Field(None, alias="inquilino_num_identificacion")
+    departamento__numero_departamento__icontains: Optional[str] = Field(None, alias="num_departamento")
+    departamento__edificio__nombre__icontains: Optional[str] = Field(None, alias="nombre_edificio")
     departamento_id: Optional[int] = None
     status: Optional[bool] = None
     al_dia: Optional[bool] = None
     frecuencia_pago: Optional[str] = None
     page: int = Field(default=1, ge=1)
     page_size: int = Field(default=10, ge=1, le=100)
+
+    model_config = {
+        "from_attributes": True
+    }

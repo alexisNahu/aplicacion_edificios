@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {APP_ROUTES, RegisterSchema, type RegisterSchemaDTO, useRegister} from "@/core";
 import { useEffect, useState } from "react";
-import InputForm from '../customForm/components/CustomInput';
+import InputForm from '../../components/customForm/components/CustomInput';
 
 function Register() {
     const { mutate: registerUser, isPending, isError, error } = useRegister();

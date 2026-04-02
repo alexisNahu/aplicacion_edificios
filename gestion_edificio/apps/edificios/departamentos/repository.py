@@ -5,4 +5,4 @@ from core.base.repository import Repository
 class DepartamentosRepository(Repository[Departamentos]):
     _table = 'departamentos'
     _model = Departamentos
-    _objects = Departamentos.objects
+    _objects = Departamentos.objects.prefetch_related('edificio')

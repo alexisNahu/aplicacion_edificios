@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {type ApiResponse, APP_ROUTES, LoginSchema, type LoginSchemaDTO, useLogin} from "@/core";
 import {useEffect, useState} from "react";
-import InputForm from '../customForm/components/CustomInput'
+import InputForm from '../../components/customForm/components/CustomInput'
 
 function Login() {
     const { mutate: login, isPending, isError, error } = useLogin();

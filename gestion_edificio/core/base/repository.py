@@ -11,18 +11,11 @@ class Repository(IRepository[T]):
     async def select(self, **kwargs):
         filtros = {}
         for clave, valor in kwargs.items():
-            # Si es un string y no tiene filtros especiales (__gte, __in, etc)
-            if isinstance(valor, str) and "__" not in clave:
-                filtros[f"{clave}__icontains"] = valor
-            else:
-                filtros[clave] = valor
-
+            filtros[clave] = valor
         # Ejecutamos la query con ILIKE (gracias a icontains)
         queryset = self._objects.filter(**filtros) if filtros else self._objects.all()
         result = await sync_to_async(list)(queryset)
 
-        if not result:
-            raise NotFoundError(f"No se encontraron registros en {self._table}")
         return result
 
     async def create(self, **kwargs): return await sync_to_async(self._objects.create)(**kwargs)

@@ -1,19 +1,30 @@
-### 1. Obtener todos los contratos
+### 1. Obtener todos los contratos (Sin filtros)
 GET http://localhost:8000/api/contratos
 Content-Type: application/json
 
-### 2. Filtrar contratos por Inquilino (ID 2) y Status Activo
-# Cambiado: id_inquilino -> inquilino_id
-GET http://localhost:8000/api/contratos?inquilino_id=2&status=true
+### 21. Obtener todos los contratos (Sin filtros)
+GET http://localhost:8000/api/contratos?inquilino_num_identificacion=12
 Content-Type: application/json
 
-### 3. Crear Contrato - EXITOSO (Inquilino 2, Departamento 11)
+### 2. Filtrar por Cédula del Inquilino (Usando el Alias definido)
+# Antes: inquilino_id=2
+# Ahora: usamos el alias que mapea a inquilino__numero_identificacion
+GET http://localhost:8000/api/contratos?status=true
+Content-Type: application/json
+
+### 3. Filtrar por Número de Departamento y Edificio
+# Probando la relación profunda: departamento__edificio__nombre
+GET http://localhost:8000/api/contratos?num_departamento=202&nombre_edificio=Torre%20Aviadores
+Content-Type: application/json
+
+### 4. Crear Contrato - EXITOSO
+# Nota: inquilino_id y departamento_id siguen igual porque son campos de ContratoCrear
 POST http://localhost:8000/api/contratos
 Content-Type: application/json
 
 {
-  "inquilino_id": 2,
-  "departamento_id": 11,
+  "inquilino_id": 3,
+  "departamento_id": 17,
   "frecuencia_pago": "mensual",
   "monto": 2100000.00,
   "dia_pago": 10,
@@ -24,7 +35,7 @@ Content-Type: application/json
   "descripcion": "Contrato de alquiler residencial - Unidad 202"
 }
 
-### 4. Crear Contrato - ERROR (Fecha fin anterior a inicio)
+### 5. Crear Contrato - ERROR (Validación Pydantic: fecha_inicio > fecha_fin)
 POST http://localhost:8000/api/contratos
 Content-Type: application/json
 
@@ -38,7 +49,7 @@ Content-Type: application/json
   "fecha_fin": "2026-01-01"
 }
 
-### 5. Crear Contrato - ERROR (Frecuencia 'diario' no permitida)
+### 6. Crear Contrato - ERROR (Frecuencia 'diario' no está en el Literal)
 POST http://localhost:8000/api/contratos
 Content-Type: application/json
 
@@ -52,17 +63,17 @@ Content-Type: application/json
   "fecha_fin": "2026-02-01"
 }
 
-### 6. Actualizar Contrato - EXITOSO (ID 1)
+### 7. Actualizar Contrato - EXITOSO
 PUT http://localhost:8000/api/contratos/8
 Content-Type: application/json
 
 {
   "monto": 2250000.00,
   "al_dia": false,
-  "descripcion": "Actualización de monto por expensas"
+  "descripcion": "Actualización de monto por ajuste anual"
 }
 
-### 7. Actualizar Contrato - ERROR (Día de pago 32 es inválido)
+### 8. Actualizar Contrato - ERROR (Día de pago 32 falla validación Field(le=31))
 PUT http://localhost:8000/api/contratos/1
 Content-Type: application/json
 
@@ -70,25 +81,10 @@ Content-Type: application/json
   "dia_pago": 32
 }
 
-### 8. Eliminar Contrato - EXITOSO (ID 1)
+### 9. Eliminar Contrato - EXITOSO
 DELETE http://localhost:8000/api/contratos/7
 Content-Type: application/json
 
-### 9. Eliminar Contrato - ERROR (ID 99999 no existe)
-DELETE http://localhost:8000/api/contratos/99999
+### 10. Listar con paginación
+GET http://localhost:8000/api/contratos?page=1&page_size=5
 Content-Type: application/json
-
-### 10. Crear contrato con departamento ocupado
-POST http://localhost:8000/api/contratos
-Content-Type: application/json
-
-{
-  "inquilino_id": 3,
-  "departamento_id": 11,
-  "frecuencia_pago": "mensual",
-  "monto": 2500000.00,
-  "dia_pago": 5,
-  "fecha_inicio": "2026-05-01",
-  "fecha_fin": "2027-05-01",
-  "descripcion": "Intento de contrato en departamento ya ocupado"
-}
