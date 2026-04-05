@@ -7,12 +7,8 @@ import {useEffect} from "react";
 
 function Contratos() {
 
-    const {dataFilters, setDataFilters} = useContratoContext();
-
-
-
+    const {dataFilters} = useContratoContext();
     const { data, isLoading, isError } = useContratos(dataFilters);
-
 
     return (
         <div className="p-6 flex flex-col gap-8">
@@ -24,14 +20,11 @@ function Contratos() {
             <ContratosFilters />
 
             <div className="bg-white rounded-xl shadow-sm border">
-                {isError && (
-                    <div className="p-4 text-red-500 bg-red-50">Error al cargar los contratos.</div>
-                )}
-
                 <ContratosTable
                     contratos={data?.data || []}
                     loading={isLoading}
                     pagination={data?.pagination}
+                    isError={isError}
                 />
             </div>
         </div>

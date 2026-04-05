@@ -1,7 +1,7 @@
 import { useState } from "react";
-import FilterField from "@/shared/components/FilterField";
+import InputField from "@/shared/components/InputField";
 import type {ContratoFiltrosDTO} from "@/core/services/contratos/schemas";
-import {useContratoContext} from "@/features/contratos/contratos.context";
+import {defaultPaginationOptions, useContratoContext} from "@/features/contratos/contratos.context";
 
 
 export function ContratosFilters() {
@@ -12,28 +12,28 @@ export function ContratosFilters() {
     };
 
     const handleClear = () => {
-        setDataFilters({});
+        setDataFilters(defaultPaginationOptions);
     };
 
     return (
         <div className="bg-white p-6 rounded-xl border shadow-sm space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
 
-                <FilterField
+                <InputField
                     label="Inquilino (RUC/CI)"
                     placeholder="Buscar documento..."
                     value={dataFilters.inquilino_num_identificacion || ""}
                     onFilter={(val) => handleInputChange({ inquilino_num_identificacion: val })}
                 />
 
-                <FilterField
+                <InputField
                     label="Número de Depto"
                     placeholder="Ej: 101..."
                     value={dataFilters.num_departamento || ""}
                     onFilter={(val) => handleInputChange({ num_departamento: val })}
                 />
 
-                <FilterField
+                <InputField
                     label="Edificio"
                     placeholder="Nombre..."
                     value={dataFilters.nombre_edificio || ""}

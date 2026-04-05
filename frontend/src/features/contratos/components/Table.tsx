@@ -1,5 +1,5 @@
 import type { Contratos } from "../models";
-import {Table} from "@/components/Ui/Table";
+import {DataTable} from "@/shared/components/DataTable";
 import type {Pagination} from "@/core";
 import {useContratoContext} from "@/features/contratos/contratos.context";
 
@@ -7,9 +7,10 @@ interface ContratosTableProps {
     contratos: Contratos[];
     loading: boolean;
     pagination?: Pagination
+    isError?: any
 }
 
-export function ContratosTable({ contratos, loading, pagination }: ContratosTableProps) {
+export function ContratosTable({ contratos, loading, pagination, isError}: ContratosTableProps) {
     const {setDataFilters, dataFilters} = useContratoContext()
 
     const columns = [
@@ -58,13 +59,19 @@ export function ContratosTable({ contratos, loading, pagination }: ContratosTabl
     ];
 
     return (
-        <Table
-            data={contratos}
-            columns={columns}
-            loading={loading}
-            onPageChange={(page) => setDataFilters({...dataFilters, page})}
-            pagination={pagination}
-            rowKey="id"
-        />
+        <>
+            {isError && (
+                <div className="p-4 text-red-500 bg-red-50">Error al cargar los contratos.</div>
+            )}
+            <DataTable
+                data={contratos}
+                columns={columns}
+                loading={loading}
+                onPageChange={(page) => setDataFilters({...dataFilters, page})}
+                pagination={pagination}
+                rowKey="id"
+            />
+        </>
+
     );
 }

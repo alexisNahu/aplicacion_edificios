@@ -17,7 +17,7 @@ interface TableProps<T> {
     onPageChange?: (page: number) => void;
 }
 
-export function Table<T>({
+export function DataTable<T>({
                              data,
                              columns,
                              loading,

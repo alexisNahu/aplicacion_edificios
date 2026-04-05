@@ -7,13 +7,15 @@ interface ContratoContextType {
     setDataFilters: React.Dispatch<React.SetStateAction<ContratoFiltrosDTO>>;
 }
 
+export const defaultPaginationOptions: ContratoFiltrosDTO = {
+    page: 1,
+    page_size: 10
+}
+
 const ContratoContext = createContext<ContratoContextType | undefined>(undefined);
 
 export const ContratoProvider = ({ children }: { children: ReactNode }) => {
-    const [dataFilters, setDataFilters] = useState<ContratoFiltrosDTO>({
-        page: 1,
-        page_size: 2,
-    });
+    const [dataFilters, setDataFilters] = useState<ContratoFiltrosDTO>(defaultPaginationOptions);
 
     return (
         <ContratoContext.Provider value={{ dataFilters, setDataFilters }}>
