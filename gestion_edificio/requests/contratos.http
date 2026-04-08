@@ -1,5 +1,5 @@
 ### 1. Obtener todos los contratos (Sin filtros)
-GET http://localhost:8000/api/contratos
+GET http://localhost:8000/api/contratos?page=1&page_size=10
 Content-Type: application/json
 
 ### 21. Obtener todos los contratos (Sin filtros)
@@ -23,8 +23,8 @@ POST http://localhost:8000/api/contratos
 Content-Type: application/json
 
 {
-  "inquilino_id": 3,
-  "departamento_id": 17,
+  "numero_identificacion_inquilino": "1234567890",
+  "numero_departamento": "222",
   "frecuencia_pago": "mensual",
   "monto": 2100000.00,
   "dia_pago": 10,
@@ -54,8 +54,8 @@ POST http://localhost:8000/api/contratos
 Content-Type: application/json
 
 {
-  "inquilino_id": 2,
-  "departamento_id": 1,
+  "numero_identificacion_inquilino": "1234567890",
+  "numero_departamento": "101",
   "frecuencia_pago": "diario",
   "monto": 50000.00,
   "dia_pago": 1,

@@ -8,7 +8,9 @@ export const BACKEND_ENDPOINTS = {
         register: `${baseURL}/auth/register`,
         logout: `${baseURL}/auth/logout`,
         me: `${baseURL}/auth/me`
-    }
+    },
+    contratos: `${baseURL}/contratos`,
+    contratos_crear: `${baseURL}/contratos/crear`,
 }
 
 
@@ -19,6 +21,10 @@ export const APP_ROUTES = {
         logout: '/auth/logout'
     },
     contratos: '/contratos',
+    contratos_crear: '/contratos/crear',
+    contratos_listar: '/contratos/listar',
+    contratos_editar: '/contratos/editar',
+    contratos_eliminar: '/contratos/eliminar',
     inquilinos: '/inquilinos',
     departamentos: '/departamentos'
 }

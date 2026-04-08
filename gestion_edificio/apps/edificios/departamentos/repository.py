@@ -1,3 +1,5 @@
+from asgiref.sync import sync_to_async
+
 from apps.edificios.models import Departamentos
 from core.base.repository import Repository
 
@@ -5,4 +7,5 @@ from core.base.repository import Repository
 class DepartamentosRepository(Repository[Departamentos]):
     _table = 'departamentos'
     _model = Departamentos
-    _objects = Departamentos.objects.prefetch_related('edificio')
+    _objects = Departamentos.objects
+    _select_related = ["edificio"]

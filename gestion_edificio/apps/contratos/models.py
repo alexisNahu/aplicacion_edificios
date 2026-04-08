@@ -50,6 +50,7 @@ class Contratos(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
         if self.departamento:
             if self.status: self.departamento.ocupado = True
             if not self.status: self.departamento.ocupado = False

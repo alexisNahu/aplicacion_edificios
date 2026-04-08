@@ -40,8 +40,8 @@ class ContratoBase(BaseModel):
         return self
 
 class ContratoCrear(ContratoBase):
-    inquilino_id: int = Field(ge=1)
-    departamento_id: int = Field(ge=1)
+    numero_identificacion: str
+    numero_departamento: str
     status: bool = Field(default=True)
     al_dia: bool = Field(default=True)
 
@@ -74,7 +74,6 @@ class ContratoRespuesta(BaseModel):
     descripcion: Optional[str]
     inquilino: AsList[InquilinoMinimo] = []
     departamento: AsList[DepartamentoMinimo] = []
-
 
     model_config = {
         "from_attributes": True

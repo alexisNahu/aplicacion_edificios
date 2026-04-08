@@ -2,7 +2,7 @@ from fastapi import Depends
 
 from apps.inquilinos.inquilinos.services import InquilinosService
 from core.base.services import Service
-from core.exceptions import handle_error, ConflictError
+from core.exceptions import handle_error, ConflictError, BadRequestError, NotFoundError
 from apps.contratos.contratos.repository import ContratosRepository
 from apps.contratos.contratos.schema import (
     ContratoRespuesta,
@@ -27,19 +27,44 @@ class ContratosService(Service[ContratoRespuesta, ContratoCrear, ContratoActuali
         self.departamentos_service = departamentos_service
 
     async def create(self, payload: ContratoCrear):
-            response = await self.departamentos_service.get(id=payload.departamento_id)
-            departamento_relacionado = response['data'][0]
-            if departamento_relacionado.ocupado:
-                raise ConflictError(f"Departamento numero {departamento_relacionado.numero_departamento} ocupado")
+        # 1. Buscar el departamento por su número (buscamos en el service de departamentos)
+        dep_res = await self.departamentos_service.get(numero_departamento=payload.numero_departamento)
+        # Validamos que exista y tomamos el primer resultado
+        if not dep_res.get('data'):
+            raise NotFoundError(f"El departamento {payload.numero_departamento} no existe.")
+        departamento_relacionado = dep_res['data'][0]
 
-            existe_contrato = await self.repo.exists_reg(departamento_id=payload.departamento_id)
+        if departamento_relacionado.ocupado:
+            raise ConflictError("El departamento {departamento_relacionado.numero_departamento} ya está ocupado.")
+        # 2. Buscar el inquilino por su cédula
+        inq_res = await self.inquilinos_service.get(numero_identificacion=payload.numero_identificacion)
+        if not inq_res.get('data'):
+            raise NotFoundError(f"El inquilino con ID {payload.numero_identificacion} no existe.")
+        inquilino_relacionado = inq_res['data'][0]
 
-            if existe_contrato: raise ConflictError('Ya existe un contrato a este departamento')
+        # 4. LIMPIEZA CRÍTICA:
+        # Convertimos el payload a dict pero EXCLUIMOS los campos que NO existen en el modelo de Django
+        data_for_repo = payload.model_dump(
+            exclude={
+                "numero_departamento",  # No existe en la tabla Contratos
+                "numero_identificacion"  # No existe en la tabla Contratos
+            },
+            exclude_none=True
+        )
 
-            await self.inquilinos_service.get(id=payload.inquilino_id)
+        # 5. ASIGNAR LAS LLAVES FORÁNEAS (FK) reales
+        # Django espera 'departamento_id' e 'inquilino_id' (o los objetos directamente)
+        data_for_repo["departamento_id"] = departamento_relacionado.id
+        data_for_repo["inquilino_id"] = inquilino_relacionado.id
 
-            cleaned_payload = payload.model_dump(exclude_none=True)
-            return await self.repo.create(**cleaned_payload)
+        # 6. LLAMADA AL REPOSITORIO
+        # Ahora data_for_repo solo tiene: frecuencia_pago, monto, dia_pago, fecha_inicio,
+        # fecha_fin, descripcion, status, al_dia, departamento_id e inquilino_id.
+        new_reg_django = await self.repo.create(**data_for_repo)
+
+        # 7. RETORNAR VALIDADO POR EL SCHEMA DE RESPUESTA
+        return self.schema_resp.model_validate(new_reg_django)
+
 
     async def update(self, id: int, payload: ContratoActualizar):
             cleaned_payload = payload.model_dump(exclude_none=True)

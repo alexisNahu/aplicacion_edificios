@@ -14,6 +14,7 @@ export const CONTRATOS_KEYS = {
 };
 
 export const useContratos = (filters: ContratoFiltrosDTO) => {
+    console.log(filters)
     return useQuery({
         queryKey: CONTRATOS_KEYS.list(filters),
         queryFn: () => ContratosService.get(filters),

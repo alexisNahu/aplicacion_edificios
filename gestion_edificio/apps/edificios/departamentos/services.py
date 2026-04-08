@@ -9,36 +9,38 @@ from apps.edificios.departamentos.schema import (
 from apps.edificios.edificios.services import EdificiosService
 
 
-
 class DepartamentosService(Service[DepartamentoRespuesta, DepartamentoCrear, DepartamentoActualizar]):
     def __init__(
             self,
             repo: DepartamentosRepository = Depends(),
             edificios_service: EdificiosService = Depends()
     ):
-        # Inicialización básica del padre
         super().__init__(
             repo=repo,
             schema_resp=DepartamentoRespuesta,
             entity_name="departamentos",
         )
-        # Guardamos el servicio de edificios para usarlo manualmente
         self.edificios_service = edificios_service
 
     async def create(self, payload: DepartamentoCrear):
-            # Validación manual de la FK (Edificio)
-            await self.edificios_service.get(id=payload.edificio_id)
+        # Validación de la FK
+        await self.edificios_service.get(id=payload.edificio_id)
 
-            # Si el get no lanzó NotFoundError, procedemos
-            cleaned_payload = payload.model_dump(exclude_none=True)
-            return await self.repo.create(**cleaned_payload)
+        cleaned_payload = payload.model_dump(exclude_none=True)
+
+        instance = await self.repo.create(**cleaned_payload)
+        # 1. El repo crea el registro (devuelve modelo de Django)
+        return  self.schema_resp.model_validate(instance)
+
 
     async def update(self, id: int, payload: DepartamentoActualizar):
-            cleaned_payload = payload.model_dump(exclude_none=True)
+        cleaned_payload = payload.model_dump(exclude_none=True)
 
-            # Si el usuario intenta cambiar el edificio, validamos que el nuevo exista
-            if "edificio_id" in cleaned_payload:
-                await self.edificios_service.get(id=cleaned_payload["edificio_id"])
+        if "edificio_id" in cleaned_payload:
+            await self.edificios_service.get(id=cleaned_payload["edificio_id"])
 
-            new_reg = await self.repo.update(id, **cleaned_payload)
-            return new_reg
+        # 1. El repo actualiza (devuelve modelo de Django)
+        new_reg_django = await self.repo.update(id, **cleaned_payload)
+
+        # 2. ✅ CORRECCIÓN: Validar con Pydantic antes de retornar
+        return self.schema_resp.model_validate(new_reg_django)

@@ -16,9 +16,10 @@ interface Props<T extends FieldValues> {
     isPending: boolean;
     children: (methods: {control: Control<T>; errors: FieldErrors<T>}) => ReactNode
     formMode: "onSubmit" | "onBlur" | "onChange" | "onTouched" | "all" | undefined
+    defaultValues: DefaultValues<T>
 }
 
-const CustomForm = <T extends FieldValues>({isPending, schema, onSubmit, children, formMode}: Props<T>) => {
+const CustomForm = <T extends FieldValues>({isPending, schema, onSubmit, children, formMode, defaultValues}: Props<T>) => {
     const {
         control,
         handleSubmit,
@@ -26,7 +27,7 @@ const CustomForm = <T extends FieldValues>({isPending, schema, onSubmit, childre
     } = useForm<T>({
         resolver: zodResolver(schema),
         mode: formMode,
-        defaultValues: {} as DefaultValues<T> 
+        defaultValues: defaultValues ?? {} as DefaultValues<T>
     })
 
     return (

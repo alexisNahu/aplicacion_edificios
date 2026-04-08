@@ -1,0 +1,12 @@
+---
+
+import Layout from "../../layouts/Layout.astro";
+import {QueryProvider} from "../../components";
+import CreateContrato from "../../features/contratos/components/crud/CrearContrato";
+---
+
+<Layout>
+    <QueryProvider client:only="react">
+        <CreateContrato client:load />
+    </QueryProvider>
+</Layout>

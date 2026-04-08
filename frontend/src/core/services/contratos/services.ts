@@ -4,7 +4,7 @@ import type {
     ContratoActualizarDTO,
     ContratoFiltrosDTO
 } from "./schemas";
-import {api, type ApiResponse, APP_ROUTES} from "@/core";
+import {api, type ApiResponse, APP_ROUTES, BACKEND_ENDPOINTS} from "@/core";
 import type {Contratos} from "@/features/contratos/models";
 
 
@@ -14,9 +14,11 @@ export const ContratosService = {
      * Obtener contratos con filtros y paginación
      */
     get: async (params: ContratoFiltrosDTO): Promise<ApiResponse<Contratos[]>> => {
-        const { data } = await api.get<ApiResponse<Contratos[]>>(APP_ROUTES.contratos, {
+        console.log(params)
+        const { data } = await api.get<ApiResponse<Contratos[]>>(BACKEND_ENDPOINTS.contratos, {
             params,
         });
+        console.log(data?.data[0])
         return data;
     },
 
@@ -25,7 +27,7 @@ export const ContratosService = {
      */
     create: async (payload: ContratoCrearDTO): Promise<ApiResponse<Contratos>> => {
         const { data } = await api.post<ApiResponse<Contratos>>(
-            APP_ROUTES.contratos,
+            BACKEND_ENDPOINTS.contratos,
             payload
         );
         return data;
@@ -36,7 +38,7 @@ export const ContratosService = {
      */
     update: async (id: number, payload: ContratoActualizarDTO): Promise<ApiResponse<Contratos>> => {
         const { data } = await api.put<ApiResponse<Contratos>>(
-            `${APP_ROUTES.contratos}/${id}`,
+            `${BACKEND_ENDPOINTS.contratos}/${id}`,
             payload
         );
         return data;
@@ -47,7 +49,7 @@ export const ContratosService = {
      */
     delete: async (id: number): Promise<ApiResponse<Contratos>> => {
         const { data } = await api.delete<ApiResponse<Contratos>>(
-            `${APP_ROUTES.contratos}/${id}`
+            `${BACKEND_ENDPOINTS.contratos}/${id}`
         );
         return data;
     }

@@ -10,8 +10,8 @@ export interface Contratos {
     frecuencia_pago: FrecuenciaPago,
     monto: number,
     dia_pago: number,
-    fecha_inicio: Date,
-    fecha_fin: Date,
+    fecha_inicio: string,
+    fecha_fin: string,
     al_dia: boolean,
     descripcion: string
 }

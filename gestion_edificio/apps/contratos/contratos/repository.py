@@ -5,4 +5,5 @@ from core.base.repository import Repository
 class ContratosRepository(Repository[Contratos]):
     _table = 'contratos'
     _model = Contratos
-    _objects = Contratos.objects.select_related('inquilino','departamento')
+    _objects = Contratos.objects
+    _select_related = ["inquilino","departamento"]

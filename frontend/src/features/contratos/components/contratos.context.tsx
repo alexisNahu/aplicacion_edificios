@@ -9,7 +9,7 @@ interface ContratoContextType {
 
 export const defaultPaginationOptions: ContratoFiltrosDTO = {
     page: 1,
-    page_size: 10
+    page_size: 5
 }
 
 const ContratoContext = createContext<ContratoContextType | undefined>(undefined);
@@ -18,9 +18,10 @@ export const ContratoProvider = ({ children }: { children: ReactNode }) => {
     const [dataFilters, setDataFilters] = useState<ContratoFiltrosDTO>(defaultPaginationOptions);
 
     return (
-        <ContratoContext.Provider value={{ dataFilters, setDataFilters }}>
-            {children}
-        </ContratoContext.Provider>
+            <ContratoContext.Provider value={{ dataFilters, setDataFilters }}>
+                {children}
+            </ContratoContext.Provider>
+
 );
 };
 

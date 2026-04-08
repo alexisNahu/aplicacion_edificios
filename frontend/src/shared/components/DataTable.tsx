@@ -24,7 +24,7 @@ export function DataTable<T>({
                              emptyMessage = "No se encontraron resultados.",
                              rowKey,
                              pagination,
-                             onPageChange
+                             onPageChange,
                          }: TableProps<T>) {
 
 

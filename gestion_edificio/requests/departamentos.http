@@ -27,7 +27,7 @@ POST http://localhost:8000/api/departamentos
 Content-Type: application/json
 
 {
-  "numero_departamento": "101",
+  "numero_departamento": "1018",
   "piso": 1,
   "descripcion": "Departamento con vista al tuning",
   "edificio_id": 9,

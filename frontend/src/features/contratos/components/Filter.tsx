@@ -1,7 +1,7 @@
 import { useState } from "react";
 import InputField from "@/shared/components/InputField";
 import type {ContratoFiltrosDTO} from "@/core/services/contratos/schemas";
-import {defaultPaginationOptions, useContratoContext} from "@/features/contratos/contratos.context";
+import {defaultPaginationOptions, useContratoContext} from "@/features/contratos/components/contratos.context";
 
 
 export function ContratosFilters() {

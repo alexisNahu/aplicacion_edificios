@@ -22,6 +22,10 @@ function LoginForm() {
                         onSubmit={(data: LoginSchemaDTO) => login(data)}
                         isPending={isPending}
                         formMode={'onBlur'}
+                        defaultValues={{
+                            username: '',
+                            password: ''
+                        }}
                     >
                         {({ control, errors }) => (
                             <div className="space-y-5">
