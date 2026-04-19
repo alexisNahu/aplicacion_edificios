@@ -1,0 +1,12 @@
+---
+
+import Layout from "../../layouts/Layout.astro";
+import {QueryProvider} from "../../components";
+import Create from '@/features/inquilinos/components/crud/Crear'
+---
+
+<Layout>
+    <QueryProvider client:only="react">
+        <Create client:load />
+    </QueryProvider>
+</Layout>

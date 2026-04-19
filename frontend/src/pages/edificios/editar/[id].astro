@@ -1,0 +1,35 @@
+---
+// pages/edificios/[id]/editar.astro
+import Layout from "@/layouts/Layout.astro";
+import { EdificiosService } from "@/core/services/edificios/services";
+import UpdateEdificio from "@/features/edificios/components/crud/Update";
+
+export async function getStaticPaths() {
+    // 1. Obtenemos la lista de edificios para generar las rutas estáticas
+    // Usamos un page_size alto para cubrir la mayoría de los registros en el build
+    const response = await EdificiosService.get({ page: 1, page_size: 100 });
+    const edificios = response.data;
+
+    // 2. Mapeamos los IDs a los parámetros de la ruta
+    return edificios.map((edificio: any) => ({
+        params: { id: edificio.id.toString() },
+    }));
+}
+
+const { id } = Astro.params;
+---
+
+<Layout title={`Editar Edificio #${id} - Gestión Inmobiliaria`}>
+    <main>
+        {/* Renderizado del componente de React para la edición */}
+        {/* Usamos client:only="react" para asegurar que los hooks de TanStack Query funcionen en el cliente */}
+        <UpdateEdificio id={id!} client:only="react" />
+    </main>
+</Layout>
+
+<style>
+    main {
+        min-height: 100vh;
+        background-color: #f9fafb;
+    }
+</style>

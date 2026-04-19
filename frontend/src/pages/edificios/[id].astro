@@ -1,0 +1,33 @@
+---
+// pages/edificios/[id]/index.astro
+import Layout from "@/layouts/Layout.astro";
+import { EdificiosService } from "@/core/services/edificios/services";
+import ReadEdificio from "@/features/edificios/components/crud/Read";
+
+export async function getStaticPaths() {
+    // 1. Usamos el servicio centralizado en lugar de un fetch manual
+    const response = await EdificiosService.get({ page: 1, page_size: 10 });
+    const edificios = response.data;
+
+    // 2. Generamos las rutas para cada edificio
+    return edificios.map((edificio: any) => ({
+        params: { id: edificio.id.toString() },
+    }));
+}
+
+const { id } = Astro.params;
+---
+
+<Layout title={`Edificio #${id} - Detalle de Propiedad`}>
+    <main>
+        {/* Renderizado del componente de lectura con hidratación en el cliente */}
+        <ReadEdificio id={id!} client:only="react" />
+    </main>
+</Layout>
+
+<style>
+    main {
+        min-height: 100vh;
+        background-color: #f9fafb;
+    }
+</style>

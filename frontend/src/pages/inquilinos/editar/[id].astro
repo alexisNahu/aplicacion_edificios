@@ -1,0 +1,32 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { InquilinosService } from "../../../core/services/inquilinos/services";
+import UpdateInquilino from "../../../features/inquilinos/components/crud/Update";
+
+export async function getStaticPaths() {
+    // 1. Llamamos al servicio para obtener la lista de inquilinos existentes
+    const response = await InquilinosService.get({ page: 1, page_size: 100 });
+    const inquilinos = response.data;
+
+    // 2. Generamos las rutas dinámicas basadas en el ID de cada inquilino
+    return inquilinos.map((inquilino: any) => ({
+        params: { id: inquilino.id.toString() },
+    }));
+}
+
+const { id } = Astro.params;
+---
+
+<Layout title={`Editar Inquilino #${id} - Gestión Inmobiliaria`}>
+    <main>
+        {/* Renderizado del componente de React para la edición */}
+        <UpdateInquilino id={id!} client:only="react" />
+    </main>
+</Layout>
+
+<style>
+    main {
+        min-height: 100vh;
+        background-color: #f9fafb;
+    }
+</style>
