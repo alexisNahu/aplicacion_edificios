@@ -35,6 +35,7 @@ class InquilinoRespuesta(BaseModel):
 
 
 class InquilinoFiltros(BaseModel):
+    id: Optional[int] = None
     nombre_completo__icontains: Optional[str] = Field(default=None, max_length=60, alias='nombre_completo')
     status: Optional[bool] = None
     numero_identificacion: Optional[str] = None

@@ -25,7 +25,6 @@ async def get_contratos(
     """
     Obtiene la lista de contratos con filtros individuales por Query Parameters.
     """
-    print(query_filters.id)
     params = query_filters.model_dump(exclude_none=True, by_alias=False)
     page = params.pop('page', 1)
     page_size = params.pop('page_size', 10)

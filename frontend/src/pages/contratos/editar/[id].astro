@@ -5,7 +5,6 @@ import {ContratosService} from "../../../core/services/contratos/services";
 // 1. IMPORTA EL SERVICIO (NO EL HOOK)
 
 export async function getStaticPaths() {
-    // 2. LLAMA AL SERVICIO DIRECTAMENTE
     const response = await ContratosService.get({});
     const contratos = response.data; // Ajusta según tu estructura
 

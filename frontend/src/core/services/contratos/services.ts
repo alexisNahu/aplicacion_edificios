@@ -18,7 +18,6 @@ export const ContratosService = {
         const { data } = await api.get<ApiResponse<Contratos[]>>(BACKEND_ENDPOINTS.contratos, {
             params,
         });
-        console.log(data?.data[0])
         return data;
     },
 
@@ -37,6 +36,7 @@ export const ContratosService = {
      * Actualizar un contrato existente por ID
      */
     update: async (id: number, payload: ContratoActualizarDTO): Promise<ApiResponse<Contratos>> => {
+
         const { data } = await api.put<ApiResponse<Contratos>>(
             `${BACKEND_ENDPOINTS.contratos}/${id}`,
             payload

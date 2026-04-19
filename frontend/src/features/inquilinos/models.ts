@@ -1,7 +1,7 @@
 export type TipoIdentificacion = 'cedula' | 'pasaporte' | 'ruc' | 'licencia'
 
 export interface Inquilinos {
-    id?: string,
+    id: number,
     nombre_completo: string,
     status: boolean,
     telefono: string,

@@ -1,9 +1,6 @@
 from pydantic import BaseModel, Field, field_validator, ConfigDict, model_validator
 from typing import Optional
 
-from core.exceptions import BadRequestError
-
-
 class EdificioCrear(BaseModel):
     nombre: str = Field(min_length=5, max_length=50)
     descripcion: Optional[str] = Field(default=None, max_length=100)

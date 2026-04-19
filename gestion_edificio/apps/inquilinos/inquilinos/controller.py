@@ -1,6 +1,10 @@
-from typing import Optional, Literal
-from fastapi import APIRouter, Depends, Query, Path, Body
-from apps.inquilinos.inquilinos.schema import InquilinoRespuesta, InquilinoCrear, InquilinoActualizar, InquilinoFiltros
+from fastapi import APIRouter, Depends, Path, Body
+from apps.inquilinos.inquilinos.schema import (
+    InquilinoRespuesta,
+    InquilinoCrear,
+    InquilinoActualizar,
+    InquilinoFiltros
+)
 from apps.inquilinos.inquilinos.services import InquilinosService
 from core.constants import AppRoutes
 from core.schemas import ApiResponse
@@ -9,21 +13,21 @@ router = APIRouter(tags=['inquilinos'])
 
 @router.get(AppRoutes.INQUILINOS, response_model=ApiResponse[list[InquilinoRespuesta]])
 async def get_inquilinos(
-    query_params: InquilinoFiltros = Depends(InquilinoFiltros),
+    query_params: InquilinoFiltros = Depends(),
     inquilinos_service: InquilinosService = Depends(InquilinosService)
 ):
-    # La lógica de filtrado y paginación ya ocurre en el Service
+    # Extraemos filtros excluyendo valores Nulos
+    # by_alias=False para que nos devuelva 'nombre_completo__icontains' para el service
     cleaned = query_params.model_dump(exclude_none=True, by_alias=False)
 
     page = cleaned.pop('page', 1)
     page_size = cleaned.pop('page_size', 10)
-
     response = await inquilinos_service.get(
         page=page,
         page_size=page_size,
         **cleaned
     )
-
+    print(response)
 
 
     return ApiResponse(
@@ -41,7 +45,8 @@ async def create_inquilino(
     inquilino = await inquilinos_service.create(payload)
     return ApiResponse(msg="Inquilino creado", data=inquilino, status_code=201)
 
-@router.put(f"{AppRoutes.INQUILINOS}/{{id}}", response_model=ApiResponse[InquilinoRespuesta])
+# Corregido: Uso de f-string con llaves simples para que FastAPI detecte el parámetro {id}
+@router.put(AppRoutes.INQUILINOS + "/{id}", response_model=ApiResponse[InquilinoRespuesta])
 async def update_inquilino(
     id: int = Path(..., ge=1),
     payload: InquilinoActualizar = Body(...),
@@ -50,7 +55,7 @@ async def update_inquilino(
     inquilino = await inquilinos_service.update(id, payload)
     return ApiResponse(msg="Inquilino actualizado", data=inquilino, status_code=200)
 
-@router.delete(f"{AppRoutes.INQUILINOS}/{{id}}", response_model=ApiResponse[InquilinoRespuesta])
+@router.delete(AppRoutes.INQUILINOS + "/{id}", response_model=ApiResponse[InquilinoRespuesta])
 async def delete_inquilino(
     id: int = Path(..., ge=1),
     inquilinos_service: InquilinosService = Depends(InquilinosService)

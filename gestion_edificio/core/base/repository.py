@@ -12,6 +12,7 @@ class Repository(IRepository[T]):
         return self._objects
 
     async def select(self, **kwargs):
+        print(kwargs)
         filtros = {}
         for clave, valor in kwargs.items():
             if isinstance(valor, str) and "__" not in clave:
@@ -22,8 +23,6 @@ class Repository(IRepository[T]):
         queryset = self._get_objects().filter(**filtros) if filtros else self._get_objects().all()
         result = await sync_to_async(list)(queryset)
 
-        if not result:
-            raise NotFoundError(f"No se encontraron registros en {self._table}")
         return result
 
     async def create(self, **kwargs):

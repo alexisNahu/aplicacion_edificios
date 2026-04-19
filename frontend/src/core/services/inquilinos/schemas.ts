@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type {Inquilinos} from "@/features/inquilinos/models";
+import type { Inquilinos } from "@/features/inquilinos/models";
 
 // ==========================================
 // 1. ENUMS Y TIPOS BASE
@@ -15,42 +15,44 @@ export const TipoIdentificacionEnum = z.enum([
 export type TipoIdentificacion = z.infer<typeof TipoIdentificacionEnum>;
 
 // ==========================================
-// 2. INTERFACES DE RESPUESTA (Modelos)
-// Lo que recibes del GET
+// 2. CAMPOS BASE (Reutilizables)
 // ==========================================
 
-// ==========================================
-// 3. SCHEMAS DE VALIDACIÓN (ZOD)
-// ==========================================
-
-// --- SCHEMA PARA CREACIÓN ---
-export const InquilinoCrearSchema = z.object({
+const inquilinoFields = {
     nombre_completo: z.string()
         .min(5, "Mínimo 5 caracteres")
         .max(60, "Máximo 60 caracteres"),
     status: z.boolean().default(true),
     telefono: z.string()
-        .min(7, "El teléfono debe tener al menos 7 dígitos")
+        .min(7, "Mínimo 7 dígitos")
         .max(60),
     email: z.email("Correo electrónico inválido"),
     numero_identificacion: z.string()
         .min(5, "Mínimo 5 caracteres")
         .max(60),
     tipo_identificacion: TipoIdentificacionEnum,
-});
+};
+
+// ==========================================
+// 3. SCHEMAS DE VALIDACIÓN (ZOD)
+// ==========================================
+
+// --- SCHEMA PARA CREACIÓN ---
+export const InquilinoCrearSchema = z.object(inquilinoFields);
 
 // --- SCHEMA PARA ACTUALIZACIÓN ---
-// Usamos .partial() para que el backend reciba solo lo que cambió
-export const InquilinoActualizarSchema = InquilinoCrearSchema.partial();
+// Usamos .partial() correctamente para permitir ediciones de campos sueltos
+export const InquilinoActualizarSchema = z.object(inquilinoFields).partial();
 
 // --- SCHEMA PARA FILTROS (Query Params) ---
 export const InquilinoFiltrosSchema = z.object({
+    id: z.coerce.number().int().optional(),
     nombre_completo: z.string().max(60).optional(),
     status: z.coerce.boolean().optional(),
-    num_identificacion: z.string().optional(),
+    numero_identificacion: z.string().optional(),
     tipo_identificacion: TipoIdentificacionEnum.optional(),
-    page: z.coerce.number().int().min(1).default(1),
-    page_size: z.coerce.number().int().min(1).max(100).default(10),
+    page: z.coerce.number().int().min(1).default(1).optional(),
+    page_size: z.coerce.number().int().min(1).max(100).default(10).optional(),
 });
 
 // ==========================================
@@ -59,7 +61,9 @@ export const InquilinoFiltrosSchema = z.object({
 
 export type InquilinoCrearDTO = z.infer<typeof InquilinoCrearSchema>;
 export type InquilinoActualizarDTO = z.infer<typeof InquilinoActualizarSchema>;
-export type InquilinoFiltrosDTO = z.infer<typeof InquilinoFiltrosSchema>;
+
+// Usamos z.input para que en el componente los filtros sean opcionales (por los defaults)
+export type InquilinoFiltrosDTO = z.input<typeof InquilinoFiltrosSchema>;
 
 /**
  * Respuesta paginada estándar

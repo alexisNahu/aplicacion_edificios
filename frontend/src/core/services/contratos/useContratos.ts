@@ -35,7 +35,6 @@ export const useCreateContrato = () => {
 };
 
 export const useUpdateContrato = () => {
-
     return useMutation({
         mutationFn: ({ id, payload }: { id: number; payload: ContratoActualizarDTO }) =>
             ContratosService.update(id, payload),

@@ -17,12 +17,8 @@ class InquilinosService(Service[InquilinoRespuesta, InquilinoCrear, InquilinoAct
             entity_name="inquilinos"
         )
 
-    async def create(self, payload: InquilinoCrear):
-        """Valida que el número de identificación sea único al crear."""
-        await self._check_unique_identificacion(payload.numero_identificacion)
-        return await super().create(payload)
-
     async def update(self, id: int, payload: InquilinoActualizar):
+        print(id, payload)
         """Valida que el nuevo número de identificación no choque con otros al actualizar."""
         if payload.numero_identificacion:
             await self._check_unique_identificacion(payload.numero_identificacion, exclude_id=id)
@@ -33,7 +29,6 @@ class InquilinosService(Service[InquilinoRespuesta, InquilinoCrear, InquilinoAct
         exists = await self.repo.select(numero_identificacion=identificacion)
 
         if exists:
-            # Si estamos en un update, verificamos que el que existe no sea el mismo que estamos editando
             if exclude_id and exists[0].id == exclude_id:
                 return
 
