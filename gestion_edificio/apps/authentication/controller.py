@@ -32,20 +32,23 @@ async def login(request: LoginRequest = Body(...), auth_service: AuthService = D
         ).model_dump()
     )
 
+    # secure=True + samesite="none" es obligatorio para que el navegador envíe la
+    # cookie en llamadas cross-site (frontend y backend viven en dominios *.vercel.app
+    # distintos); localhost se trata como contexto seguro, así que también funciona en dev.
     response.set_cookie(
         key="access_token",
         value=response_data.access_token,
         httponly=True,
-        secure=False,
-        samesite="lax",
+        secure=True,
+        samesite="none",
     )
 
     response.set_cookie(
         key="refresh_token",
         value=response_data.refresh_token,
         httponly=True,
-        secure=False,
-        samesite="lax",
+        secure=True,
+        samesite="none",
     )
 
     return response  # ← devuelves el JSONResponse directamente, no lo envuelves en ApiResponse
@@ -76,8 +79,8 @@ async def me(
 
 @router.post(AppRoutes.LOGOUT)
 async def logout(response: Response):
-    response.delete_cookie("access_token")
-    response.delete_cookie("refresh_token")
+    response.delete_cookie("access_token", secure=True, samesite="none")
+    response.delete_cookie("refresh_token", secure=True, samesite="none")
     return ApiResponse(msg="Usuario deslogeado", status_code=status.HTTP_200_OK)
 
 

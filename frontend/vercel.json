@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://REEMPLAZAR-CON-TU-BACKEND.vercel.app/api/:path*"
+    }
+  ]
+}

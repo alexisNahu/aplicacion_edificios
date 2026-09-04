@@ -2,6 +2,12 @@
 
 import Layout from "../../layouts/Layout.astro";
 import EdificiosPage from "@/features/edificios/components/EdificiosPage"
+
+const token = Astro.cookies.get("access_token");
+
+if (!token) {
+    return Astro.redirect("/auth/login");
+}
 ---
 <Layout>
     <EdificiosPage client:load/>

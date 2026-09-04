@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+myenv/
+venv/
+.venv/
+*.egg-info/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# JetBrains
+.idea/
+
+# OS
+.DS_Store

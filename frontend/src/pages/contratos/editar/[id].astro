@@ -1,17 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import EditarContrato from "../../../features/contratos/components/crud/EditarContrato";
-import {ContratosService} from "../../../core/services/contratos/services";
-// 1. IMPORTA EL SERVICIO (NO EL HOOK)
-
-export async function getStaticPaths() {
-    const response = await ContratosService.get({});
-    const contratos = response.data; // Ajusta según tu estructura
-
-    return contratos.map((contrato: any) => ({
-        params: { id: contrato.id.toString() },
-    }));
-}
 
 const { id } = Astro.params;
 ---

@@ -12,7 +12,9 @@ export const BACKEND_ENDPOINTS = {
     contratos: `${baseURL}/contratos`,
     contratos_crear: `${baseURL}/contratos/crear`,
     inquilinos: `${baseURL}/inquilinos`,
-    edificios: `${baseURL}/edificios`
+    edificios: `${baseURL}/edificios`,
+    pagos: `${baseURL}/pagos`
+
 }
 
 
@@ -27,8 +29,8 @@ export const APP_ROUTES = {
     contratos_crear: '/contratos/crear',
     contratos_listar: '/contratos/listar',
     contratos_editar: '/contratos/editar',
+    contratos_pagar: '/contratos/pagar',
     contratos_eliminar: '/contratos/eliminar',
-
     inquilinos: '/inquilinos',
     departamentos: '/departamentos',
 }

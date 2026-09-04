@@ -1,18 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { InquilinosService } from "../../../core/services/inquilinos/services";
 import UpdateInquilino from "../../../features/inquilinos/components/crud/Update";
-
-export async function getStaticPaths() {
-    // 1. Llamamos al servicio para obtener la lista de inquilinos existentes
-    const response = await InquilinosService.get({ page: 1, page_size: 100 });
-    const inquilinos = response.data;
-
-    // 2. Generamos las rutas dinámicas basadas en el ID de cada inquilino
-    return inquilinos.map((inquilino: any) => ({
-        params: { id: inquilino.id.toString() },
-    }));
-}
 
 const { id } = Astro.params;
 ---

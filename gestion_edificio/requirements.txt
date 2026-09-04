@@ -14,7 +14,9 @@ crashtest==0.4.1
 cryptography==46.0.5
 distlib==0.4.0
 Django==6.0.3
+dj-database-url==2.3.0
 dnspython==2.8.0
+python-dotenv==1.0.1
 dulwich==1.1.0
 ecdsa==0.19.1
 email-validator==2.3.0

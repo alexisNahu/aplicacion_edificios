@@ -1,6 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ContratosPage from "../../features/contratos/components/ContratosPage";
+
+const token = Astro.cookies.get("access_token");
+
+if (!token) {
+    return Astro.redirect("/auth/login");
+}
 ---
 
 <Layout>

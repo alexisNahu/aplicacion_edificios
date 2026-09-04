@@ -7,7 +7,6 @@ from apps.finanzas.pagos.service import PagosService
 from apps.finanzas.models import Pagos
 from core.constants import AppRoutes
 from core.schemas import ApiResponse
-
 router = APIRouter(tags=['pagos'])
 
 @router.get(AppRoutes.PAGOS, response_model=ApiResponse[list[PagoRespuesta]], status_code=200)

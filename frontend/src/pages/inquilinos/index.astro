@@ -2,6 +2,12 @@
 
 import Layout from "../../layouts/Layout.astro";
 import InquilinosPage from "@/features/inquilinos/components/InquilinosPage"
+
+const token = Astro.cookies.get("access_token");
+
+if (!token) {
+    return Astro.redirect("/auth/login");
+}
 ---
 <Layout>
     <InquilinosPage client:load/>

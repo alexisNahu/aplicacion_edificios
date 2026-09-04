@@ -1,20 +1,7 @@
 ---
 // pages/edificios/[id]/editar.astro
 import Layout from "@/layouts/Layout.astro";
-import { EdificiosService } from "@/core/services/edificios/services";
 import UpdateEdificio from "@/features/edificios/components/crud/Update";
-
-export async function getStaticPaths() {
-    // 1. Obtenemos la lista de edificios para generar las rutas estáticas
-    // Usamos un page_size alto para cubrir la mayoría de los registros en el build
-    const response = await EdificiosService.get({ page: 1, page_size: 100 });
-    const edificios = response.data;
-
-    // 2. Mapeamos los IDs a los parámetros de la ruta
-    return edificios.map((edificio: any) => ({
-        params: { id: edificio.id.toString() },
-    }));
-}
 
 const { id } = Astro.params;
 ---

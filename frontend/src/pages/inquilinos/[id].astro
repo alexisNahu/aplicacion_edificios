@@ -2,16 +2,6 @@
 import Layout from "../../layouts/Layout.astro";
 import ReadInquilino from "../../features/inquilinos/components/crud/Read";
 
-export async function getStaticPaths() {
-    const response = await fetch('http://localhost:8000/api/inquilinos/');
-    const result = await response.json();
-    const inquilinos = result.data;
-
-    return inquilinos.map((inquilino: any) => ({
-        params: { id: inquilino.id.toString() },
-    }));
-}
-
 const { id } = Astro.params;
 ---
 

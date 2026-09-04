@@ -1,5 +1,3 @@
-import {stat} from "unstorage/drivers/utils/node-fs";
-
 export const getErrorMessage = (error: any, conflictMsg?: string) => {
     const statusCode = error?.response?.status;
     const responseData = error?.response?.data;

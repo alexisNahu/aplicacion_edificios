@@ -5,7 +5,7 @@ import {queryClient} from "../../httpClient";
 export const useLogin = () => {
     return useMutation({
         mutationFn: authServices.login,
-        onSuccess: (userData) => console.log(`Usuario ${userData} logeado correctamente`),
+        onSuccess: (userData) => window.location.href = "/",
         onError: (error) => console.error(`Error logeando ${error}`)
     }, queryClient);
 };
@@ -13,7 +13,7 @@ export const useLogin = () => {
 export const useRegister = () =>
     useMutation({
         mutationFn: authServices.register,
-        onSuccess: (userData) => console.log(`Usuario ${userData} registrado correctamente`),
+        onSuccess: (userData) => window.location.href = "/",
         onError: (error) => console.error(`Error registrando ${error}`)
     }, queryClient);
 

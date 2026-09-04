@@ -10,26 +10,33 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+yr^4#48y^ibwu2+p^bbj*f4)7dj08+j&+1b(xc)7yvp92+2a3'
-SECRET_REFRESH_KEY = 'ñalkjdfñkasdf4a65we4f84a64$%&$/%/$Aa_'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', 'django-insecure-+yr^4#48y^ibwu2+p^bbj*f4)7dj08+j&+1b(xc)7yvp92+2a3'
+)
+SECRET_REFRESH_KEY = os.environ.get('SECRET_REFRESH_KEY', 'ñalkjdfñkasdf4a65we4f84a64$%&$/%/$Aa_')
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_MINUTES = 60
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -81,16 +88,29 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "gestion_edificios_db",
-        "USER": "postgres",
-        "PASSWORD": "1234",
-        "HOST": "localhost",
-        "PORT": "5432",
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    # Conexión a Supabase (u otro Postgres remoto) vía DATABASE_URL.
+    # conn_max_age=0 porque el pooler de Supabase (pgbouncer) no soporta
+    # conexiones persistentes reutilizadas entre invocaciones serverless.
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=0, ssl_require=True)
     }
-}
+    # Requerido cuando se usa el "Transaction pooler" de Supabase (puerto 6543):
+    # pgbouncer en modo transacción no soporta cursores server-side.
+    DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get('DB_NAME', 'gestion_edificios_db'),
+            "USER": os.environ.get('DB_USER', 'postgres'),
+            "PASSWORD": os.environ.get('DB_PASSWORD', '1234'),
+            "HOST": os.environ.get('DB_HOST', 'localhost'),
+            "PORT": os.environ.get('DB_PORT', '5432'),
+        }
+    }
 
 
 # Password validation

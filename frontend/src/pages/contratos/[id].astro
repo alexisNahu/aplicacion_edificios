@@ -2,17 +2,6 @@
 import Layout from "../../layouts/Layout.astro";
 import DetalleContrato from "../../features/contratos/components/crud/DetalleContrato";
 
-export async function getStaticPaths() {
-    // Llamada a tu API de FastAPI/Django para obtener los contratos
-    const response = await fetch('http://localhost:8000/api/contratos/');
-    const result = await response.json();
-    const contratos = result.data; // Ajusta según la estructura de tu respuesta
-
-    return contratos.map((contrato: any) => ({
-        params: { id: contrato.id.toString() },
-    }));
-}
-
 const { id } = Astro.params;
 ---
 

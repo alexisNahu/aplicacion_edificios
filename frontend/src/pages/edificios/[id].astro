@@ -1,19 +1,7 @@
 ---
 // pages/edificios/[id]/index.astro
 import Layout from "@/layouts/Layout.astro";
-import { EdificiosService } from "@/core/services/edificios/services";
 import ReadEdificio from "@/features/edificios/components/crud/Read";
-
-export async function getStaticPaths() {
-    // 1. Usamos el servicio centralizado en lugar de un fetch manual
-    const response = await EdificiosService.get({ page: 1, page_size: 10 });
-    const edificios = response.data;
-
-    // 2. Generamos las rutas para cada edificio
-    return edificios.map((edificio: any) => ({
-        params: { id: edificio.id.toString() },
-    }));
-}
 
 const { id } = Astro.params;
 ---

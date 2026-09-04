@@ -25,19 +25,29 @@ class PagosService(Service[PagoRespuesta, PagoCrear, PagoActualizar]):
         self.departamentos_service = DepartamentosService
 
     async def create(self, payload: PagoCrear) -> PagoRespuesta:
-        con_res = await self.contratos_service.get(departamento__numero_departamento__icontains=payload.numero_departamento)
+        # 1. Buscar el contrato usando el número de departamento
+        con_res = await self.contratos_service.get(
+            departamento__numero_departamento__icontains=payload.numero_departamento
+        )
 
         if not con_res.get('data'):
-            raise NotFoundError(f"El contrato {payload.numero_departamento} no existe.")
+            raise NotFoundError(f"El contrato para el depto {payload.numero_departamento} no existe.")
 
         contrato_relacionado = con_res.get('data')[0]
 
+        # 2. Excluir el campo que no existe en el modelo Django 'Pagos'
         cleaned_payload = payload.model_dump(exclude={
             "contrato_id",
+            "numero_departamento",  # <--- ESTO ES VITAL
         })
 
+        # 3. Asignar el ID del contrato al campo que sí existe en el modelo
         cleaned_payload['contrato_id'] = contrato_relacionado.id
 
+        # Opcional: Asegúrate de que 'saldo_pendiente' se calcule si tu modelo lo requiere
+        # O deja que tu lógica de negocio/modelo se encargue
+
+        # 4. Llamar al repositorio (ahora sin campos extraños)
         new_reg = await self.repo.create(**cleaned_payload)
 
         return self.schema_resp.model_validate(new_reg)
